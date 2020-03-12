@@ -46,7 +46,7 @@
     {
       type: `ShowFile`,
       name: `/etc/wireguard/server.info`,
-      description: `Client configuration`,
+      description: `Select client above to show configuration`,
       id: 'wgs'
     },
     {
@@ -73,9 +73,8 @@
           let tr;
           for (tr = event.target; tr.nodeName !== 'TR'; tr = tr.parentElement)
             ;
-          const id = tr.querySelector('td:nth-of-type(1) input').value;
-          const key = tr.querySelector('td:nth-of-type(2) input').value;
-          config.innerText = text.replace('#ID#', id).replace('#Select Client Above#', key);
+          const id = tr.querySelector('td:nth-of-type(2) input').value;
+          config.innerText = text.replace('#ID#', id);
         });
       `
     }
