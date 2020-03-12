@@ -45,8 +45,8 @@ PORT=$(cat ${PORT_FILE})
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__
 [Interface]
-PrivateKey = <b>Client Generated Private Key</b>
-Address = ${SERVER_NETWORK}.<b>ID</b>/32
+PrivateKey = ***Client Generated Private Key***
+Address = ${SERVER_NETWORK}.***ID***/32
 
 [Peer]
 PublicKey = $(cat ${PUBLIC_KEY})
@@ -64,8 +64,8 @@ ListenPort = ${PORT}
 __EOF__
 # Add peers
 for client in $(cat ${CLIENTS_CONFIG}); do
-  client_id = $(echo $client | sed "s/#.*//")
-  client_key = $(echo $client | sed "s/.*#//")
+  client_id=$(echo ${client} | sed "s/#.*//")
+  client_key=$(echo ${client} | sed "s/.*#//")
   cat >> ${ROOT}/${DEVICE}.conf <<__EOF__
 [Peer]
 PublicKey = ${client_key}
