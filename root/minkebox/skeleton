@@ -40,12 +40,14 @@
         { name: `Client Public Key` }
       ],
       pattern: `{{1}}#{{2}}`,
-      controls: true
+      controls: true,
+      id: 'wgc'
     },
     {
       type: `ShowFile`,
       name: `/etc/wireguard/server.info`,
-      description: `Server information`
+      description: `Client configuration`,
+      id: 'wgs'
     },
     {
       type: `Help`,
@@ -61,6 +63,21 @@
       type: `Text`,
       text: `<br/>UPnP is not available on your network. Please manually forward the VPN UDP port (listed at the top of the configuration file) from your router to {{__HOMEADDRESSES}}.`,
       visible: `!property.UPnPAvailable`
+    },
+    {
+      type: `Script`,
+      script: `
+        const config = document.querySelector('#wgs .value');
+        const text = config.innerText;
+        document.querySelector('#wgc .pure-table').addEventListener('click', function(e) {
+          let tr;
+          for (tr = event.target; tr.nodeName !== 'TR'; tr = tr.parentElement)
+            ;
+          const id = tr.querySelector('td:nth-of-type(1) input').value;
+          const key = tr.querySelector('td:nth-of-type(2) input').value;
+          config.innerText = text.replace('#ID#', id).replace('#Select Client Above#', key);
+        });
+      `
     }
   ],
   properties: [
