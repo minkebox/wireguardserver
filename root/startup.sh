@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/sh -x
 
 HOME_INTERFACE=${__HOME_INTERFACE}
 DDNS_DOMAIN=minkebox.net
@@ -32,9 +32,7 @@ if [ ! -e ${PRIVATE_KEY} ]; then
     while true ; do
       PORT=$((${PORTRANGE_START} + RANDOM % ${PORTRANGE_LEN}))
       if ! $(echo $active_ports | grep -q ${PORT}); then
-        if ! $(echo $active_ports | grep -q ${PORT_TUN}); then
-          break;
-        fi
+        break;
       fi
     done
   else
@@ -50,6 +48,7 @@ cat > ${SERVER_CONFIG} <<__EOF__
 PublicKey = $(cat ${PUBLIC_KEY})
 Endpoint = ${PRIVATE_HOSTNAME}.${DDNS_DOMAIN}:${PORT}
 AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}
+PersistentKeepalive = 25
 __EOF__
 
 # Create server config
@@ -58,7 +57,6 @@ cat > ${ROOT}/${DEVICE}.conf <<__EOF__
 PrivateKey = $(cat ${PRIVATE_KEY})
 Address = ${SERVER_CIDR}
 ListenPort = ${PORT}
-PersistentKeepalive = 25
 __EOF__
 # Add peers
 nr=2
@@ -76,6 +74,8 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 
 # Start Wireguard
 wg-quick up ${DEVICE}
+
+trap "killall sleep miniupnpd; exit" TERM INT
 
 # Open the NAT
 sleep 1 &
