@@ -44,6 +44,10 @@ PORT=$(cat ${PORT_FILE})
 
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__
+[Interface]
+PrivateKey = <b>Client Generated Private Key</b>
+Address = ${SERVER_NETWORK}.<b>ID</b>/32
+
 [Peer]
 PublicKey = $(cat ${PUBLIC_KEY})
 Endpoint = ${PRIVATE_HOSTNAME}.${DDNS_DOMAIN}:${PORT}
@@ -59,14 +63,14 @@ Address = ${SERVER_CIDR}
 ListenPort = ${PORT}
 __EOF__
 # Add peers
-nr=2
-for client_key in $(cat ${CLIENTS_CONFIG}); do
+for client in $(cat ${CLIENTS_CONFIG}); do
+  client_id = $(echo $client | sed "s/#.*//")
+  client_key = $(echo $client | sed "s/.*#//")
   cat >> ${ROOT}/${DEVICE}.conf <<__EOF__
 [Peer]
 PublicKey = ${client_key}
-AllowedIPs = ${SERVER_NETWORK}.${nr}/32
+AllowedIPs = ${SERVER_NETWORK}.${client_id}/32
 __EOF__
-  nr=$((${nr} + 1))
 done
 
 # Masquarade the vpn

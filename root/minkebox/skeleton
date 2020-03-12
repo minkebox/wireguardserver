@@ -36,9 +36,10 @@
       description: `Clients`,
       headers: [
         { name: `Name` },
-        { name: `Public Key` }
+        { name: `ID` },
+        { name: `Client Public Key` }
       ],
-      pattern: `{{1}}`,
+      pattern: `{{1}}#{{2}}`,
       controls: true
     },
     {
