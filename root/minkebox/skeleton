@@ -1,7 +1,7 @@
 {
   name: `Wireguard`,
   description: `Super simple VPN to connect to your home network`,
-  image: `registry.minkebox.net/minkebox/wireguard`,
+  image: `registry.minkebox.net/minkebox/wireguardserver`,
   tags: [ 'VPN', 'Security', 'Networking' ],
   actions: [
     {
