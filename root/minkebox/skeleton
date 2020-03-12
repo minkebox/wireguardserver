@@ -126,10 +126,10 @@
     polling: 1,
     parser: `
       const rxtx = input.split(' ');
-      if (rxtx.length == 4) {
+      if (rxtx.length == 2) {
         const now = Date.now() / 1000;
-        rxtx[0] = parseInt(rxtx[0]) + parseInt(rxtx[2]);
-        rxtx[1] = parseInt(rxtx[1]) + parseInt(rxtx[3]);
+        rxtx[0] = parseInt(rxtx[0]);
+        rxtx[1] = parseInt(rxtx[1]);
         if (!state) {
           state = {
             rx: [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ],
