@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk --no-cache add wireguard-tools miniupnpc ;\
+RUN apk --no-cache add wireguard-tools miniupnpc
 
 COPY root/ /
 
