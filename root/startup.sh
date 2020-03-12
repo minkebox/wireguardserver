@@ -46,8 +46,9 @@ PORT=$(cat ${PORT_FILE})
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__
 [Interface]
-PrivateKey = ***Client Generated Private Key***
-Address = ${SERVER_NETWORK}.***ID***/32
+PrivateKey = #Select Client Above#
+Address = ${SERVER_NETWORK}.#ID#/32
+DNS = ${DNSSERVER}
 
 [Peer]
 PublicKey = $(cat ${PUBLIC_KEY})
@@ -62,7 +63,6 @@ cat > ${ROOT}/${DEVICE}.conf <<__EOF__
 PrivateKey = $(cat ${PRIVATE_KEY})
 Address = ${SERVER_CIDR}
 ListenPort = ${PORT}
-DNS = ${DNSSERVER}
 __EOF__
 # Add peers
 for client in $(cat ${CLIENTS_CONFIG}); do
@@ -81,7 +81,7 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 # Start Wireguard
 wg-quick up ${DEVICE}
 
-trap "killall sleep miniupnpd; exit" TERM INT
+trap "killall sleep; exit" TERM INT
 
 # Open the NAT
 sleep 1 &
