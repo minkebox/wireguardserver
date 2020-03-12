@@ -105,7 +105,7 @@
     }
   ],
   monitor: {
-    cmd: `echo $(ifconfig wg0 | grep "RX bytes" | tr '\\n' ' ' | sed "s/^.*RX bytes:\\([0-9]*\\).*TX bytes:\\([0-9]*\\).*$/\\1 \\2/") $(ifconfig tap0 | grep "RX bytes" | tr '\\n' ' ' | sed "s/^.*RX bytes:\\([0-9]*\\).*TX bytes:\\([0-9]*\\).*$/\\1 \\2/")`,
+    cmd: `echo $(ifconfig wg0 | grep "RX bytes" | tr '\\n' ' ' | sed "s/^.*RX bytes:\\([0-9]*\\).*TX bytes:\\([0-9]*\\).*$/\\1 \\2/")`,
     polling: 1,
     parser: `
       const rxtx = input.split(' ');
