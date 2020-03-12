@@ -46,7 +46,7 @@ PORT=$(cat ${PORT_FILE})
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__
 [Interface]
-PrivateKey = #Select Client Above#
+PrivateKey = ## Client private key on your device ##
 Address = ${SERVER_NETWORK}.#ID#/32
 DNS = ${DNSSERVER}
 
