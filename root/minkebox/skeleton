@@ -35,7 +35,8 @@
       name: `/etc/wireguard/clients.info`,
       description: `Clients`,
       headers: [
-        { name: `Name`, `Public Key` }
+        { name: `Name` },
+        { name: `Public Key` }
       ],
       pattern: `{{1}}`,
       controls: true
