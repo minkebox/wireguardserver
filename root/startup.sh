@@ -3,6 +3,7 @@
 HOME_INTERFACE=${__HOME_INTERFACE}
 DDNS_DOMAIN=minkebox.net
 PRIVATE_HOSTNAME=${__GLOBALID}
+DNSSERVER=${__DNSSERVER}
 PROTO=udp
 TTL=600 # 10 minutes
 TTL2=300 # TTL/2
@@ -61,6 +62,7 @@ cat > ${ROOT}/${DEVICE}.conf <<__EOF__
 PrivateKey = $(cat ${PRIVATE_KEY})
 Address = ${SERVER_CIDR}
 ListenPort = ${PORT}
+DNS = ${DNSSERVER}
 __EOF__
 # Add peers
 for client in $(cat ${CLIENTS_CONFIG}); do
