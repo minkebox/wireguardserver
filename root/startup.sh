@@ -18,6 +18,7 @@ PORTRANGE_LEN=256
 SERVER_NETWORK=10.253.122
 SERVER_CIDR=${SERVER_NETWORK}.1/24
 DEVICE=wg0
+MULTICAST=224.0.0.251/24
 
 HOME_CIDR=$(ip addr show dev ${HOME_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
 HOME_IP=$(echo ${HOME_CIDR} | sed "s/\/.*$//")
@@ -53,7 +54,7 @@ DNS = ${DNSSERVER}
 [Peer]
 PublicKey = $(cat ${PUBLIC_KEY})
 Endpoint = ${PRIVATE_HOSTNAME}.${DDNS_DOMAIN}:${PORT}
-AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}
+AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}, ${MULTICAST}
 PersistentKeepalive = 25
 __EOF__
 
@@ -71,7 +72,7 @@ for client in $(cat ${CLIENTS_CONFIG}); do
   cat >> ${ROOT}/${DEVICE}.conf <<__EOF__
 [Peer]
 PublicKey = ${client_key}
-AllowedIPs = ${SERVER_NETWORK}.${client_id}/32
+AllowedIPs = ${SERVER_NETWORK}.${client_id}/32, ${MULTICAST}
 __EOF__
 done
 
@@ -82,6 +83,7 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 wg-quick up ${DEVICE}
 
 # Avahi relay
+ifconfig ${DEVICE} multicast
 dbus-daemon --system
 avahi-daemon -D
 
