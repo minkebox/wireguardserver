@@ -18,7 +18,7 @@ PORTRANGE_LEN=256
 SERVER_NETWORK=10.253.122
 SERVER_CIDR=${SERVER_NETWORK}.1/24
 DEVICE=wg0
-MULTICAST=224.0.0.251/24
+MULTICAST=224.0.0.0/8
 
 HOME_CIDR=$(ip addr show dev ${HOME_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
 HOME_IP=$(echo ${HOME_CIDR} | sed "s/\/.*$//")
