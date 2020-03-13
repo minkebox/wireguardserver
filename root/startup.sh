@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#! /bin/sh
 
 HOME_INTERFACE=${__HOME_INTERFACE}
 DDNS_DOMAIN=minkebox.net
