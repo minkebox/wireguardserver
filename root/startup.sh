@@ -81,7 +81,11 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 # Start Wireguard
 wg-quick up ${DEVICE}
 
-trap "killall sleep; exit" TERM INT
+# Avahi relay
+dbus-daemon --system
+avahi-daemon -D
+
+trap "killall sleep avahi-daemon dbus-daemon; exit" TERM INT
 
 # Open the NAT
 sleep 1 &
