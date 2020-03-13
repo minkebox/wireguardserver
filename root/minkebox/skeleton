@@ -19,16 +19,20 @@
       description: `Select network`
     },
     {
-      type: `Header`,
-      title: `Configuration`
-    },
-    {
       type: `EditEnvironment`,
       name: `SELECTED_PORT`,
       description: `Select the UDP port number for the VPN, or leave blank to auto-assign`,
       validate: `\\d*`,
       visible: `property.Advanced`,
       enabled: `property.FirstUse`
+    },
+    {
+      type: `Header`,
+      title: `Clients`
+    },
+    {
+      type: `Text`,
+      text: `Add clients to the tables below. Each entry will be auto-populated with an ID (between 2 and 250) and a public/private keypair. You can edit these if you wish.  Selecting an entry will show the associated configuration as text and a QR code.`
     },
     {
       type: `EditFileAsTable`,
@@ -45,9 +49,13 @@
       id: 'wgc'
     },
     {
+      type: `Header`,
+      title: `Configuration`
+    },
+    {
       type: `ShowFile`,
       name: `/etc/wireguard/server.info`,
-      description: `Select client above to show configuration`,
+      description: ``,
       id: 'wgs'
     },
     {
@@ -89,6 +97,7 @@
       script: `
         const config = document.querySelector('#wgs .value');
         const text = config.innerText;
+        config.innerText = '';
         const qrd = document.querySelector('#qrcode');
         function qr() {
           qrd.innerHTML = '<div style="margin-left:33%">' + new QRCode({ join: true, content: config.innerText }).svg() + '</div>';
@@ -120,7 +129,7 @@
             }, 0);
           }
           else if (e.target.classList.contains('remove')) {
-            config.innerText = text;
+            config.innerText = '';
             qrd.innerHTML = '';
           }
           else {
