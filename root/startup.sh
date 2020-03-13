@@ -15,13 +15,18 @@ PUBLIC_KEY=${ROOT}/key.public
 PORT_FILE=${ROOT}/port
 PORTRANGE_START=41310
 PORTRANGE_LEN=256
-SERVER_NETWORK=10.253.122
-SERVER_CIDR=${SERVER_NETWORK}.1/24
 DEVICE=wg0
 MULTICAST=224.0.0.0/8
 
 HOME_CIDR=$(ip addr show dev ${HOME_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
 HOME_IP=$(echo ${HOME_CIDR} | sed "s/\/.*$//")
+
+if [ "${SELECTED_SERVER_NETWORK}" != "" ]; then
+  SERVER_NETWORK=${SELECTED_SERVER_NETWORK}
+else
+  SERVER_NETWORK=10.253.122
+fi
+SERVER_CIDR=${SERVER_NETWORK}.1/24
 
 # Generate keys
 if [ ! -e ${PRIVATE_KEY} ]; then
@@ -54,7 +59,7 @@ DNS = ${DNSSERVER}
 [Peer]
 PublicKey = $(cat ${PUBLIC_KEY})
 Endpoint = ${PRIVATE_HOSTNAME}.${DDNS_DOMAIN}:${PORT}
-AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}, ${MULTICAST}
+AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}
 PersistentKeepalive = 25
 __EOF__
 
@@ -72,7 +77,7 @@ for client in $(cat ${CLIENTS_CONFIG}); do
   cat >> ${ROOT}/${DEVICE}.conf <<__EOF__
 [Peer]
 PublicKey = ${client_key}
-AllowedIPs = ${SERVER_NETWORK}.${client_id}/32, ${MULTICAST}
+AllowedIPs = ${SERVER_NETWORK}.${client_id}/32
 __EOF__
 done
 
@@ -84,8 +89,8 @@ wg-quick up ${DEVICE}
 
 # Avahi relay
 ifconfig ${DEVICE} multicast
-dbus-daemon --system
-avahi-daemon -D
+#dbus-daemon --system
+#avahi-daemon -D
 
 trap "killall sleep avahi-daemon dbus-daemon; exit" TERM INT
 
