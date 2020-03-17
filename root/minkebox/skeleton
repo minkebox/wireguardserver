@@ -37,7 +37,7 @@
       title: `Clients`
     },
     {
-      type: `EditEnvironmentAsCheckBox`,
+      type: `EditEnvironmentAsCheckbox`,
       name: `INTERNET_ONLY`,
       description: `Clients can <b>only</b> access the Internet`
     },
