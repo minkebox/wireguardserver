@@ -59,7 +59,6 @@ DNS = ${DNSSERVER}
 PublicKey = $(cat ${PUBLIC_KEY})
 Endpoint = ${PRIVATE_HOSTNAME}.${DDNS_DOMAIN}:${PORT}
 AllowedIPs = ${SERVER_CIDR}, ${HOME_CIDR}
-PersistentKeepalive = 25
 __EOF__
 
 # Create server config
@@ -77,6 +76,7 @@ for client in $(cat ${CLIENTS_CONFIG}); do
 [Peer]
 PublicKey = ${client_key}
 AllowedIPs = ${SERVER_NETWORK}.${client_id}/32
+PersistentKeepalive = 25
 __EOF__
 done
 
