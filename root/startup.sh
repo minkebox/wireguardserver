@@ -48,6 +48,10 @@ if [ ! -e ${PRIVATE_KEY} ]; then
 fi
 PORT=$(cat ${PORT_FILE})
 
+if [ "${INTERNET_ONLY}" = "true" ]; then
+  DNSSERVER="1.1.1.1"
+fi
+
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__
 [Interface]
@@ -82,6 +86,12 @@ done
 
 # Masquarade the vpn
 iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
+
+# Internet only
+if [ "${INTERNET_ONLY}" = "true" ]; then
+  iptables -I INPUT -i ${DEVICE} -d ${SERVER_CIDR} -j DROP
+  iptables -I INPUT -i ${DEVICE} -d ${HOME_CIDR} -j DROP
+fi
 
 # Start Wireguard
 wg-quick up ${DEVICE}
