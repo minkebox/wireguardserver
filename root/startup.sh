@@ -16,7 +16,6 @@ PORT_FILE=${ROOT}/port
 PORTRANGE_START=41310
 PORTRANGE_LEN=256
 DEVICE=wg0
-MULTICAST=224.0.0.0/8
 
 HOME_CIDR=$(ip addr show dev ${HOME_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
 HOME_IP=$(echo ${HOME_CIDR} | sed "s/\/.*$//")
@@ -87,12 +86,7 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 # Start Wireguard
 wg-quick up ${DEVICE}
 
-# Avahi relay
-ifconfig ${DEVICE} multicast
-#dbus-daemon --system
-#avahi-daemon -D
-
-trap "killall sleep avahi-daemon dbus-daemon; exit" TERM INT
+trap "killall sleep; exit" TERM INT
 
 # Open the NAT
 sleep 1 &
