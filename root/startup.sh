@@ -89,9 +89,9 @@ iptables -t nat -I POSTROUTING -o ${HOME_INTERFACE} -j MASQUERADE
 
 # Internet only
 if [ "${INTERNET_ONLY}" = "true" ]; then
-  iptables -A INPUT -i ${DEVICE} -d 10.0.0.0/8 -j DROP
-  iptables -A INPUT -i ${DEVICE} -d 172.16.0.0/12 -j DROP
-  iptables -A INPUT -i ${DEVICE} -d 192.168.0.0/16 -j DROP
+  iptables -A FORWARD -i ${DEVICE} -d 10.0.0.0/8 -j DROP
+  iptables -A FORWARD -i ${DEVICE} -d 172.16.0.0/12 -j DROP
+  iptables -A FORWARD -i ${DEVICE} -d 192.168.0.0/16 -j DROP
 fi
 
 # Start Wireguard
