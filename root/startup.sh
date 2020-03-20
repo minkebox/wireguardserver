@@ -94,7 +94,7 @@ if [ "${INTERNET_ONLY}" = "true" ]; then
 fi
 
 # Start Wireguard
-wg-quick up ${DEVICE}
+wg-quick up ${DEVICE_INTERFACE}
 
 trap "killall sleep; exit" TERM INT
 
