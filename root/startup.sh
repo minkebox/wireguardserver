@@ -101,10 +101,13 @@ trap "killall sleep; exit" TERM INT
 # Open the NAT
 sleep 1 &
 while wait "$!"; do
-  upnpc -m ${__DEFAULT_INTERFACE} -e ${HOSTNAME}_wg -a ${DEFAULT_IP} ${PORT} ${PORT} ${PROTO} ${TTL}
+  upnpc -m ${__DEFAULT_INTERFACE} -e ${HOSTNAME} -a ${DEFAULT_IP} ${PORT} ${PORT} ${PROTO} ${TTL}
   if [ "${__HOSTIP6}" != "" ]; then
-    upnpc -m ${__DEFAULT_INTERFACE}-e ${HOSTNAME}_wg6 -6 -A "" 0 ${__HOSTIP6} ${PORT} ${PROTO} ${TTL}
+    upnpc -m ${__DEFAULT_INTERFACE} -e ${HOSTNAME}_6 -6 -A "" 0 ${__HOSTIP6} ${PORT} ${PROTO} ${TTL}
   fi
   sleep ${TTL2} &
 done
 upnpc -m ${__DEFAULT_INTERFACE} -d ${PORT} ${PROTO}
+if [ "${__HOSTIP6}" != "" ]; then
+  upnpc -m ${__DEFAULT_INTERFACE} -6 -d ${PORT} ${PROTO}
+fi
