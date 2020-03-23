@@ -12,8 +12,6 @@ CLIENTS_CONFIG=${ROOT}/clients.info
 PRIVATE_KEY=${ROOT}/key.private
 PUBLIC_KEY=${ROOT}/key.public
 PORT_FILE=${ROOT}/port
-PORTRANGE_START=41310
-PORTRANGE_LEN=256
 DEVICE_INTERFACE=wg0
 
 DEFAULT_CIDR=$(ip addr show dev ${__DEFAULT_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
@@ -29,21 +27,7 @@ SERVER_CIDR=${SERVER_NETWORK}.1/24
 # Generate keys
 if [ ! -e ${PRIVATE_KEY} ]; then
   wg genkey | tee ${PRIVATE_KEY} | wg pubkey > ${PUBLIC_KEY}
-  if [ "${SELECTED_PORT}" = "" ]; then
-    # Prime random
-    RANDOM=$(head -1 /dev/urandom | cksum)
-    # Select an unused port at random from within our standard range avoiding any we see as in use
-    active_ports=$(upnpc -m ${__NAT_INTERFACE} -L | grep "^ *\d\? UDP\|TCP .*$" | sed "s/^.*:\(\d*\).*$/\1/")
-    while true ; do
-      PORT=$((${PORTRANGE_START} + RANDOM % ${PORTRANGE_LEN}))
-      if ! $(echo $active_ports | grep -q ${PORT}); then
-        break;
-      fi
-    done
-  else
-    PORT=${SELECTED_PORT}
-  fi
-  echo ${PORT} > ${PORT_FILE}
+  echo ${SELECTED_PORT} > ${PORT_FILE}
 fi
 PORT=$(cat ${PORT_FILE})
 
