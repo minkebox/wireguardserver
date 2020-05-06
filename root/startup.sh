@@ -67,6 +67,12 @@ PersistentKeepalive = 25
 __EOF__
 done
 
+# Replace default monitoring
+iptables -D OUTPUT -j TX
+iptables -D INPUT -j RX
+iptables -I FORWARD -o ${DEVICE_INTERFACE} -j TX
+iptables -I FORWARD -i ${DEVICE_INTERFACE} -j RX
+
 # Masquarade the vpn
 iptables -t nat -I POSTROUTING -o ${__DEFAULT_INTERFACE} -j MASQUERADE
 
