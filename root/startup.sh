@@ -15,7 +15,6 @@ PORT_FILE=${ROOT}/port
 DEVICE_INTERFACE=wg0
 
 DEFAULT_CIDR=$(ip addr show dev ${__DEFAULT_INTERFACE} | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}\b" | head -1)
-DEFAULT_IP=$(echo ${DEFAULT_CIDR} | sed "s/\/.*$//")
 
 if [ "${SELECTED_SERVER_NETWORK}" != "" ]; then
   SERVER_NETWORK=${SELECTED_SERVER_NETWORK}
@@ -34,6 +33,14 @@ PORT=$(cat ${PORT_FILE})
 if [ "${INTERNET_ONLY}" = "true" ]; then
   DNSSERVER="1.1.1.1"
 fi
+
+if [ "${OVERRIDE_DNS}" != "" ]; then
+  DNSSERVER="${OVERRIDE_DNS}"
+fi
+if [ "${OVERRIDE_CIRD}" != "" ]; then
+  DEFAULT_CIDR="${OVERRIDE_CIDR}"
+fi
+
 
 # Create server config for clients to read
 cat > ${SERVER_CONFIG} <<__EOF__

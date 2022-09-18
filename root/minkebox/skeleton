@@ -36,6 +36,18 @@
       initValue: `10.253.122`
     },
     {
+      type: `EditEnvironment`,
+      name: `OVERRIDE_DNS`,
+      descritiption: `Override default DNS`,
+      placeholder: `Default`
+    },
+    {
+      type: `EditEnvironment`,
+      name: `OVERRIDE_CIDR`,
+      descritiption: `Override private network addresses`,
+      placeholder: `X.X.X.X/Y`
+    },
+    {
       type: `Header`,
       title: `Clients`
     },
@@ -118,7 +130,7 @@
         }
         document.querySelector('#wgc .pure-table').addEventListener('click', function(e) {
           let tr;
-          for (tr = event.target; tr.nodeName !== 'TR'; tr = tr.parentElement)
+          for (tr = e.target; tr.nodeName !== 'TR'; tr = tr.parentElement)
             ;
           if (e.target.classList.contains('add')) {
             setTimeout(function() {
@@ -155,7 +167,7 @@
         });
         document.querySelector('#wgc .pure-table').addEventListener('input', function(e) {
           let tr;
-          for (tr = event.target; tr && tr.nodeName !== 'TR'; tr = tr.parentElement)
+          for (tr = e.target; tr && tr.nodeName !== 'TR'; tr = tr.parentElement)
             ;
           if (tr) {
             const privateKey = tr.querySelector('td:nth-of-type(4) input').value;
@@ -187,6 +199,14 @@
     {
       type: `Environment`,
       name: `INTERNET_ONLY`
+    },
+    {
+      type: `Environment`,
+      name: `OVERRIDE_DNS`
+    },
+    {
+      type: `Environment`,
+      name: `OVERRIDE_CIDR`
     },
     {
       type: `Directory`,
