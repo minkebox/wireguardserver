@@ -37,7 +37,7 @@ fi
 if [ "${OVERRIDE_DNS}" != "" ]; then
   DNSSERVER="${OVERRIDE_DNS}"
 fi
-if [ "${OVERRIDE_CIRD}" != "" ]; then
+if [ "${OVERRIDE_CIDR}" != "" ]; then
   DEFAULT_CIDR="${OVERRIDE_CIDR}"
 fi
 

@@ -38,13 +38,13 @@
     {
       type: `EditEnvironment`,
       name: `OVERRIDE_DNS`,
-      descritiption: `Override default DNS`,
+      description: `Override default DNS`,
       placeholder: `Default`
     },
     {
       type: `EditEnvironment`,
       name: `OVERRIDE_CIDR`,
-      descritiption: `Override private network addresses`,
+      description: `Override private network addresses`,
       placeholder: `X.X.X.X/Y`
     },
     {
